@@ -1,0 +1,43 @@
+#drop-area {
+  border: 2px dashed #ccc;
+  border-radius: 20px;
+  width: 480px;
+  font-family: sans-serif;
+  margin: 100px auto;
+  padding: 20px;
+}
+#drop-area.highlight {
+  border-color: purple;
+}
+p {
+  margin-top: 0;
+}
+hr {
+  width: 80%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: #000000;
+}
+.image-loader {
+  margin-bottom: 10px;
+  text-align: center;
+}
+.button {
+  display: inline-block;
+  padding: 10px;
+  background: #ccc;
+  cursor: pointer;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+.button:hover {
+  background: #ddd;
+}
+#fileElem {
+  display: none;
+}
+.instructions-form {
+  width: 80%;
+  margin: auto;
+  
+}
