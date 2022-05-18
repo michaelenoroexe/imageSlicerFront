@@ -39,5 +39,16 @@ hr {
 .instructions-form {
   width: 80%;
   margin: auto;
-  
+  display: flex;
+  flex-direction: row;
+  img {
+    max-width: 510px;
+    max-height: 510px;
+  }
+  form {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+
+  }
 }

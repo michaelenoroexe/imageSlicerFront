@@ -17,6 +17,20 @@
   <hr>
   <div class="instructions-form">
     <img src="{{displayImagePath.str}}" alt="image">
-    
+    <form action="">
+      <h2>Set parameters of split</h2>
+      <mat-form-field appearance="fill">
+        <mat-label>Format type</mat-label>
+        <mat-select [(value)]="SelectedFormat">
+          <mat-option [value]="format.value" *ngFor="let format of formats; let i = index">{{ format.viewValue }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Column number</mat-label>
+        <mat-select [(value)]="selectedColNumber">
+          <mat-option [value]="i" *ngFor="let number of maxColomnNumber; let i = index">{{i+1}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
   </div>
 </div>
