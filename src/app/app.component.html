@@ -17,7 +17,7 @@
   <hr>
   <div class="instructions-form">
     <img src="{{displayImagePath.str}}" alt="image">
-    <form action="">
+    <form (submit)="UploadFile($event);">
       <h2>Set parameters of split</h2>
       <mat-form-field appearance="fill">
         <mat-label>Format type</mat-label>
@@ -31,6 +31,7 @@
           <mat-option [value]="i" *ngFor="let number of maxColomnNumber; let i = index">{{i+1}}</mat-option>
         </mat-select>
       </mat-form-field>
+      <button type="submit">Slice</button>
     </form>
   </div>
 </div>
