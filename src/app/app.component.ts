@@ -26,7 +26,7 @@ export class AppComponent {
   selectedColNumber:number = 1;
   maxColomnNumber = new Array(this.formats[5].maxColNum);  
   defaultColomnNumber:number = 1;
-
+  selectedOrientation:string = "portrait";
   // Display on page users selected image 
   OnFileSelected(event:any) {
     let ab = this.displayImagePath;
@@ -66,30 +66,19 @@ export class AppComponent {
     let arbRef = this.recievedImage;
     formData.append('file', this.img);
     formData.append('type', ''+this.selectedFormat);
-    formData.append('colNum',''+this.selectedColNumber);
-    formData.append('orientation', 'landscape');
+    formData.append('colNum',''+(this.selectedColNumber+1));
+    formData.append('orientation', this.selectedOrientation);
     let ar = this.instrSendeService.PostInst(formData);
-    console.log(ar);
-    ar.subscribe ({
-      next(value:any) {
-        const blob = new Blob(value, {type: 'image/*'});
-        let reader = new FileReader();
-        let fil:File = value;
-        console.log(fil);
-        reader.readAsDataURL(blob);
-        reader.onload = function() {
-          arbRef.str = reader.result;
-        };
-        reader.onerror = function() {
-        };
-      },
-      error(err) {
-        console.log(err)
-      },
-      complete() {
-        console.log()
-      },
-    })
+    ar.subscribe (response=>
+      {
+        let blob:Blob = response.body as Blob;
+        console.log(blob);
+        let a = document.createElement('a');
+        a.download='Poster.pdf'
+        a.href = window.URL.createObjectURL(blob);
+        a.click();
+      }
+    )
   }
   constructor (private instrSendeService:InstructionSenderService) {}
     //constructor ( private http: HttpClient) { }

@@ -22,7 +22,8 @@ export class InstructionSenderService {
   //}
   //Send image to server
    PostInst(file:FormData){
-     return this.http.post("https://localhost:7272/api/slice", file); 
+     return this.http.post("https://localhost:7272/api/slice", file,
+      {observe:'response', responseType:"blob"}); 
    }
 }
   

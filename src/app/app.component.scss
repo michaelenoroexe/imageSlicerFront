@@ -42,8 +42,8 @@ hr {
   display: flex;
   flex-direction: row;
   img {
-    max-width: 510px;
-    max-height: 510px;
+    max-width: 50em;
+    max-height: 50em;
   }
   form {
     text-align: center;
@@ -51,7 +51,18 @@ hr {
     margin-right: auto;
     display: flex;
     flex-direction: column;
-    .submit {
+    label {
+      margin-bottom: 10px;
+      font-size: 1.5em;
+    }
+    mat-radio-group {
+      margin-bottom: 20px;
+      mat-radio-button {
+        margin-right: 10px;
+      }
+    }
+    button {
+      height: 30px;
     }
   }
 }

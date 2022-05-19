@@ -31,6 +31,11 @@
           <mat-option [value]="i" *ngFor="let number of maxColomnNumber; let i = index">{{i+1}}</mat-option>
         </mat-select>
       </mat-form-field>
+      <label id="orientation-label">Orientation</label>
+      <mat-radio-group aria-labelledby="orientation-label" (change)="selectedOrientation = $event.value" [value]="selectedOrientation">
+        <mat-radio-button value="portrait">Portrait</mat-radio-button>
+        <mat-radio-button value="landscape">Landscape</mat-radio-button>
+      </mat-radio-group>
       <button type="submit">Slice</button>
     </form>
   </div>
