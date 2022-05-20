@@ -14,6 +14,7 @@ export class AppComponent implements OnInit {
   img:File | string = "";
   displayImagePath:path = new path();
   dropAreaHighlight:boolean = false;
+  imageFieldBlank:boolean = false;
   formats = [{viewValue: "A0", value: "A0", maxColNum: 2},{viewValue: "A1", value: "A1", maxColNum: 3},{viewValue: "A2", value: "A2", maxColNum: 5},{viewValue: "A3", value: "A3", maxColNum: 8},{viewValue: "A4", value: "A4", maxColNum: 10},{viewValue: "A5", value: "A5", maxColNum: 15},{viewValue: "A6", value: "A6", maxColNum: 20}]
   selectedFormat:string | undefined = "A4";
   sliceForm: FormGroup = new FormGroup({});
@@ -40,9 +41,15 @@ export class AppComponent implements OnInit {
   defaultColomnNumber:number = 1;
   selectedOrientation:string = "portrait";
   // Display on page users selected image 
-  OnFileSelected(event:any) {
+  OnFileSelected(event:any, type:string = "manual") {
+    this.imageFieldBlank = false;
     let ab = this.displayImagePath;
-    this.img = <File>event.dataTransfer.files[0];
+    if (type =="drag") this.img = <File>event.dataTransfer.files[0];
+    else this.img = <File>event.files[0];
+    if(!this.img.type.startsWith('image')) {
+      alert("Incorrect file type! Accept only image format type");
+      return;
+    }
     let reader = new FileReader();
     reader.readAsDataURL(this.img);
     reader.onload = function() {
@@ -69,12 +76,13 @@ export class AppComponent implements OnInit {
     this.dropAreaHighlight = false;
   }
   HandleDrop(e:any) {
-    this.OnFileSelected(e);
+    this.OnFileSelected(e, "drag");
   }
 
   UploadFile(event:Event) {
     event.preventDefault();
-    if (this.sliceForm?.invalid || this.img=="") return;
+    if (this.img=="") {this.imageFieldBlank =true; return;}
+    if (this.sliceForm?.invalid) return;
     let formData = new FormData();
     formData.append('type', ''+this.img);
     formData.append('type', ''+this.sliceForm?.get('type')?.value);

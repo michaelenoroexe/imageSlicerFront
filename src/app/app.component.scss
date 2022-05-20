@@ -1,13 +1,16 @@
 #drop-area {
   border: 2px dashed #ccc;
   border-radius: 20px;
-  width: 480px;
+  width: fit-content;
   font-family: sans-serif;
-  margin: 100px auto;
+  margin: 10px auto;
   padding: 20px;
 }
 #drop-area.highlight {
   border-color: purple;
+}
+#drop-area.blank {
+  border-color: red;
 }
 p {
   margin-top: 0;
