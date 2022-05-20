@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { InstructionSenderService } from './requests/instructionsPost/post.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+//import { FormControl, FormGroup, Validators } from '@angular/forms/forms';
 
 @Component({
   selector: 'app-root',
@@ -8,20 +10,30 @@ import { InstructionSenderService } from './requests/instructionsPost/post.servi
   styleUrls: ['./app.component.scss'],
   providers: [InstructionSenderService],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   img:File | string = "";
   displayImagePath:path = new path();
-  recievedImage:path = new path();
   dropAreaHighlight:boolean = false;
   formats = [{viewValue: "A0", value: "A0", maxColNum: 2},{viewValue: "A1", value: "A1", maxColNum: 3},{viewValue: "A2", value: "A2", maxColNum: 5},{viewValue: "A3", value: "A3", maxColNum: 8},{viewValue: "A4", value: "A4", maxColNum: 10},{viewValue: "A5", value: "A5", maxColNum: 15},{viewValue: "A6", value: "A6", maxColNum: 20}]
   selectedFormat:string | undefined = "A4";
+  sliceForm: FormGroup = new FormGroup({});
   // Format that user select
   public get SelectedFormat() {
     return this.selectedFormat;
   }
   public set SelectedFormat(val:string|undefined) {
     this.SetMaxColumns(this.formats.find(ar=>ar.value==val)?.maxColNum);
+    if (this.selectedColNumber > this.maxColomnNumber.length) this.selectedColNumber = this.maxColomnNumber.length-1;
     this.selectedFormat = this.formats.find(ar=>ar.value==val)?.value;
+  }
+
+  // 
+  ngOnInit(): void {
+    this.sliceForm = new FormGroup({
+      type: new FormControl(this.selectedFormat , [Validators.required]),
+      colNumber: new FormControl(this.selectedColNumber , [Validators.required]),
+      orientation: new FormControl (this.selectedOrientation , [Validators.required])
+    });
   }
   selectedColNumber:number = 1;
   maxColomnNumber = new Array(this.formats[5].maxColNum);  
@@ -62,12 +74,12 @@ export class AppComponent {
 
   UploadFile(event:Event) {
     event.preventDefault();
+    if (this.sliceForm?.invalid || this.img=="") return;
     let formData = new FormData();
-    let arbRef = this.recievedImage;
-    formData.append('file', this.img);
-    formData.append('type', ''+this.selectedFormat);
-    formData.append('colNum',''+(this.selectedColNumber+1));
-    formData.append('orientation', this.selectedOrientation);
+    formData.append('type', ''+this.img);
+    formData.append('type', ''+this.sliceForm?.get('type')?.value);
+    formData.append('colNum',''+this.sliceForm?.get('colNumber')?.value);
+    formData.append('orientation', ''+(this.sliceForm?.get('orientation')?.value)+1);
     let ar = this.instrSendeService.PostInst(formData);
     ar.subscribe (response=>
       {
@@ -81,7 +93,6 @@ export class AppComponent {
     )
   }
   constructor (private instrSendeService:InstructionSenderService) {}
-    //constructor ( private http: HttpClient) { }
 }
 
 

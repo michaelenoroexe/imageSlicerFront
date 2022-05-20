@@ -15,24 +15,24 @@
     </form>
   </div>
   <hr>
-  <div class="instructions-form">
+  <div class="instructions-form" [formGroup]="sliceForm">
     <img src="{{displayImagePath.str}}" alt="image">
     <form (submit)="UploadFile($event);">
       <h2>Set parameters of split</h2>
       <mat-form-field appearance="fill">
         <mat-label>Format type</mat-label>
-        <mat-select [(value)]="SelectedFormat">
+        <mat-select [(value)]="SelectedFormat" formControlName="type">
           <mat-option [value]="format.value" *ngFor="let format of formats; let i = index">{{ format.viewValue }}</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field appearance="fill">
+      <mat-form-field appearance="fill" >
         <mat-label>Column number</mat-label>
-        <mat-select [(value)]="selectedColNumber">
+        <mat-select [(value)]="selectedColNumber" required formControlName="colNumber"> 
           <mat-option [value]="i" *ngFor="let number of maxColomnNumber; let i = index">{{i+1}}</mat-option>
         </mat-select>
       </mat-form-field>
       <label id="orientation-label">Orientation</label>
-      <mat-radio-group aria-labelledby="orientation-label" (change)="selectedOrientation = $event.value" [value]="selectedOrientation">
+      <mat-radio-group formControlName="orientation" aria-labelledby="orientation-label" (change)="selectedOrientation = $event.value" [value]="selectedOrientation">
         <mat-radio-button value="portrait">Portrait</mat-radio-button>
         <mat-radio-button value="landscape">Landscape</mat-radio-button>
       </mat-radio-group>
