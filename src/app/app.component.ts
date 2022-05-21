@@ -84,7 +84,8 @@ export class AppComponent implements OnInit {
     if (this.img=="") {this.imageFieldBlank =true; return;}
     if (this.sliceForm?.invalid) return;
     let formData = new FormData();
-    formData.append('type', ''+this.img);
+    console.log(this.img);
+    formData.append('file', this.img);
     formData.append('type', ''+this.sliceForm?.get('type')?.value);
     formData.append('colNum',''+this.sliceForm?.get('colNumber')?.value);
     formData.append('orientation', ''+(this.sliceForm?.get('orientation')?.value)+1);
