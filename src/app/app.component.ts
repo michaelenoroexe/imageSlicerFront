@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   displayImagePath:path = new path();
   dropAreaHighlight:boolean = false;
   imageFieldBlank:boolean = false;
-  formats = [{viewValue: "A0", value: "A0", maxColNum: 2},{viewValue: "A1", value: "A1", maxColNum: 3},{viewValue: "A2", value: "A2", maxColNum: 5},{viewValue: "A3", value: "A3", maxColNum: 8},{viewValue: "A4", value: "A4", maxColNum: 10},{viewValue: "A5", value: "A5", maxColNum: 15},{viewValue: "A6", value: "A6", maxColNum: 20}]
+  formats = [{viewValue: "A0", value: "A0", maxColNum: 4},{viewValue: "A1", value: "A1", maxColNum: 6},{viewValue: "A2", value: "A2", maxColNum: 8},{viewValue: "A3", value: "A3", maxColNum: 12},{viewValue: "A4", value: "A4", maxColNum: 17},{viewValue: "A5", value: "A5", maxColNum: 24},{viewValue: "A6", value: "A6", maxColNum: 30}]
   selectedFormat:string | undefined = "A4";
   sliceForm: FormGroup = new FormGroup({});
   // Format that user select
@@ -27,17 +27,8 @@ export class AppComponent implements OnInit {
     if (this.selectedColNumber > this.maxColomnNumber.length) this.selectedColNumber = this.maxColomnNumber.length-1;
     this.selectedFormat = this.formats.find(ar=>ar.value==val)?.value;
   }
-
-  // 
-  ngOnInit(): void {
-    this.sliceForm = new FormGroup({
-      type: new FormControl(this.selectedFormat , [Validators.required]),
-      colNumber: new FormControl(this.selectedColNumber , [Validators.required]),
-      orientation: new FormControl (this.selectedOrientation , [Validators.required])
-    });
-  }
   selectedColNumber:number = 1;
-  maxColomnNumber = new Array(this.formats[5].maxColNum);  
+  maxColomnNumber = new Array(this.formats[4].maxColNum);  
   defaultColomnNumber:number = 1;
   selectedOrientation:string = "portrait";
   // Display on page users selected image 
@@ -58,6 +49,13 @@ export class AppComponent implements OnInit {
     reader.onerror = function() {
     };
   }
+  ngOnInit(): void {
+    this.sliceForm = new FormGroup({
+      type: new FormControl(this.selectedFormat , [Validators.required]),
+      colNumber: new FormControl(this.selectedColNumber , [Validators.required]),
+      orientation: new FormControl (this.selectedOrientation , [Validators.required])
+    });
+  }
   //  Set max column number to format
   SetMaxColumns(num:number|undefined) {
     this.maxColomnNumber = Array(num);
@@ -75,7 +73,8 @@ export class AppComponent implements OnInit {
   Unhighlight() {
     this.dropAreaHighlight = false;
   }
-  HandleDrop(e:any) {
+  HandleDrop(e:any, disabled:boolean) {
+    if (disabled) return;
     this.OnFileSelected(e, "drag");
   }
 
@@ -87,18 +86,24 @@ export class AppComponent implements OnInit {
     console.log(this.img);
     formData.append('file', this.img);
     formData.append('type', ''+this.sliceForm?.get('type')?.value);
-    formData.append('colNum',''+this.sliceForm?.get('colNumber')?.value);
-    formData.append('orientation', ''+(this.sliceForm?.get('orientation')?.value)+1);
+    formData.append('colNum',(1+this.sliceForm?.get('colNumber')?.value)+'');
+    formData.append('orientation', ''+this.sliceForm?.get('orientation')?.value);
     let ar = this.instrSendeService.PostInst(formData);
-    ar.subscribe (response=>
-      {
-        let blob:Blob = response.body as Blob;
+    let slForm = this.sliceForm;
+    slForm.disable();
+    ar.subscribe ({
+      next(value) {
+        let blob:Blob = value.body as Blob;
         console.log(blob);
         let a = document.createElement('a');
         a.download='Poster.pdf'
         a.href = window.URL.createObjectURL(blob);
         a.click();
-      }
+      },
+      error(err) {
+        slForm.enable();
+      },
+    }
     )
   }
   constructor (private instrSendeService:InstructionSenderService) {}

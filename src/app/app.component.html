@@ -7,9 +7,9 @@
       (dragenter)="[PreventDefaults($event), Highlight()]"
       (dragover)="[PreventDefaults($event), Highlight()]"
       (dragleave)="[PreventDefaults($event), Unhighlight()]"
-      (drop)="[PreventDefaults($event), Unhighlight(), HandleDrop($event)]"
+      (drop)="[PreventDefaults($event), Unhighlight(), HandleDrop($event, sliceForm.disabled)]"
       [class.highlight]="dropAreaHighlight"
-      [class.blank]="imageFieldBlank" 
+      [class.blank]="imageFieldBlank"
     >
       <form class="image-loader" [style.display]="img!=''?'none':'block'">
         <p>Load image with "File Selector" dialog or just drag image to highlighted zone</p>
@@ -37,7 +37,7 @@
         <mat-radio-button value="portrait">Portrait</mat-radio-button>
         <mat-radio-button value="landscape">Landscape</mat-radio-button>
       </mat-radio-group>
-      <button type="submit">Slice</button>
+      <button type="submit" [disabled]="sliceForm.disabled">Slice</button>
     </form>
   </div>
 </div>
