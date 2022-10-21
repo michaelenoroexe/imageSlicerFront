@@ -1,5 +1,9 @@
 # ImageSlicerFront
 
+Front end of web application that can scale images to selected by the user size, and then split it to standart print formats.
+
+You can choose resulted print type, number of column to split image, and orientation of splitting.
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.3.
 
 ## Development server
